@@ -35,6 +35,25 @@
 
 `tns plugin add nativescript-audio`
 
+## Recording Permissions
+
+#### iOS
+
+- To record, add the following to your project's `Info.plist` file in the `App_Resources/iOS` directory ([see here for example](./demo/app/App_Resources/iOS/Info.plist)).
+
+```xml
+<key>NSMicrophoneUsageDescription</key>
+<string>The app needs to access your Microphone to record.</string>
+```
+
+#### Android
+
+- To record, add the following permission to your `AndroidManifest.xml` file in `App_Resources/Android/` directory ([see here for example](./demo/app/App_Resources/Android/src/main/AndroidManifest.xml)).
+
+```xml
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+```
+
 ---
 
 ### Android Native Classes
@@ -46,13 +65,6 @@
 
 - [Player - AVAudioPlayer](https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAudioPlayerClassReference/)
 - [Recorder - AVAudioRecorder](https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAudioRecorder_ClassReference/)
-
-Note: You will need to grant permissions on iOS to allow the device to access the microphone if you are using the recording function. If you don't, your app may crash on device and/or your app might be rejected during Apple's review routine. To do this, add this key to your `app/App_Resources/iOS/Info.plist` file:
-
-```xml
-<key>NSMicrophoneUsageDescription</key>
-<string>Recording Practice Sessions</string>
-```
 
 ## Usage
 
@@ -175,7 +187,7 @@ player
 | _playFromUrl(options: AudioPlayerOptions)_: `Promise`                  | Auto-play from a url.                                        |
 | _pause()_: `Promise<boolean>`                                          | Pause playback.                                              |
 | _resume()_: `void`                                                     | Resume playback.                                             |
-| _seekTo(time:number)_: `Promise<boolean>`                              | Seek to position of track (in seconds).                     |
+| _seekTo(time:number)_: `Promise<boolean>`                              | Seek to position of track (in seconds).                      |
 | _dispose()_: `Promise<boolean>`                                        | Free up resources when done playing audio.                   |
 | _isAudioPlaying()_: `boolean`                                          | Determine if player is playing.                              |
 | _getAudioTrackDuration()_: `Promise<string>`                           | Duration of media file assigned to the player.               |
