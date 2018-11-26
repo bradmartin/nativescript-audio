@@ -1,6 +1,6 @@
 {
   "name": "nativescript-audio",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "description": "NativeScript plugin to record and play audio.",
   "main": "audio",
   "typings": "index.d.ts",
@@ -33,7 +33,8 @@
     "prepublishOnly": "npm run build",
     "precommit": "lint-staged",
     "development.setup": "npm run setup && npm link && cd ../demo && npm link nativescript-audio && cd ../src",
-    "generate.typings.ios": "cd ../demo && TNS_DEBUG_METADATA_PATH=\"$(pwd)/metadata\" tns build ios && TNS_TYPESCRIPT_DECLARATIONS_PATH=\"$(pwd)/typings\" tns build ios && echo 'Now look for your library typings in demo/typings!'"
+    "generate.typings.ios": "cd ../demo && TNS_DEBUG_METADATA_PATH=\"$(pwd)/metadata\" tns build ios && TNS_TYPESCRIPT_DECLARATIONS_PATH=\"$(pwd)/typings\" tns build ios && echo 'Now look for your library typings in demo/typings!'",
+    "make-changelog": "cd ../ && github_changelog_generator -u nstudio -p nativescript-audio"
   },
   "lint-staged": {
     "*.ts": [
