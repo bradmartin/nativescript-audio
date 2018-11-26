@@ -1,7 +1,5 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded">
-  <Page.actionBar>
-    <ActionBar title="NativeScript Audio" backgroundColor="#3F51B5" color="#fff" />
-  </Page.actionBar>
+  <ActionBar title="NativeScript Audio" />
   <TabView tabsBackgroundColor="#3F51B5" selectedColor="#FF4081">
     <TabView.items>
       <TabViewItem title="Recorder">
@@ -9,13 +7,13 @@
           <ScrollView>
             <StackLayout class="p-10" width="100%">
               <ActivityIndicator color="#3489db" busy="{{ isRecording }}" />
-              <button row="0" col="0" class="btn btn-primary" text="Start Recording" tap="{{ startRecord }}" />
+              <button row="0" col="0" class="primary-btn" ios:borderRadius="4" text="Start Recording" tap="{{ startRecord }}" />
               <Label text="{{ 'Meter Value: ' + audioMeter }}" textWrap="true" />
-              <button class="btn btn-primary" text="Stop Recording" tap="{{ stopRecord }}" />
-              <button class="btn btn-outline text-info" text="Get File" tap="{{ getFile }}" />
+              <button class="primary-btn" ios:borderRadius="4" text="Stop Recording" tap="{{ stopRecord }}" />
+              <button class="accent-btn" ios:borderRadius="4" text="Get File" tap="{{ getFile }}" />
               <label text="{{ recordedAudioFile }}" class="gray" textWrap="true" />
-              <button class="btn btn-primary" text="Play Recorded" tap="{{ playRecordedFile }}" />
-              <button class="btn btn-primary" text="Stop Playback" tap="{{ pauseAudio }}" />
+              <button class="primary-btn" ios:borderRadius="4" text="Play Recorded File" tap="{{ playRecordedFile }}" />
+              <button class="primary-btn" ios:borderRadius="4" text="Stop Playback" tap="{{ pauseAudio }}" />
             </StackLayout>
           </ScrollView>
         </TabViewItem.view>
@@ -23,28 +21,28 @@
       <TabViewItem title="Player">
         <TabViewItem.view>
           <ScrollView>
-            <GridLayout rows="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto" columns="*, *, *" class="p-10">
+            <GridLayout rows="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto" columns="*, *, *" class="p-10">
               <label row="0" colSpan="3" class="center text-primary h3" text="Welcome To Fight Club!" textWrap="true" />
-              <button row="1" colSpan="3" class="btn btn-primary" text="Play Remote Audio" tap="{{ playRemoteFile }}" />
-              <label row="2" colSpan="3" text="Note: Remote files can have a lag before playing due to processing and network speeds." class="h4" textWrap="true" />
+              <button row="1" colSpan="3" class="primary-btn" ios:borderRadius="4" text="Play Remote Audio" tap="{{ playRemoteFile }}" />
+              <label row="2" colSpan="3" text="Note: Remote files can have a lag before playing due to processing and network speeds." class="h3" textWrap="true" />
               <Label row="3" colSpan="3" text="" class="hr-dark" textWrap="true" />
-              <button row="4" colSpan="3" class="btn btn-primary" text="Play Local Audio File" tap="{{ playLocalFile }}" />
+              <button row="4" colSpan="3" class="primary-btn" ios:borderRadius="4" text="Play Local Audio File" tap="{{ playLocalFile }}" />
               <label row="5" colSpan="3" class="blue h3 text-center" text="Angel - Theory of a Deadman" textWrap="true" />
-              <Button row="6" col="0" class="btn btn-primary" text="Pause" tap="{{ pauseAudio }}" />
-              <Button row="6" col="1" class="btn btn-primary" text="Resume" tap="{{ resumePlayer }}" />
-              <button row="6" col="2" class="btn btn-primary" text="Stop" tap="{{ stopPlaying }}" />
-              <Label row="7" colSpan="3" text="Player Speed on Android only API 23+" textWrap="true" />
-              <Button row="8" col="0" text="Speed 1" tap="{{ playSpeed1 }}" />
-              <Button row="8" col="1" text="Speed 1.5" tap="{{ playSpeed15 }}" />
-              <Button row="8" col="2" text="Speed 2" tap="{{ playSpeed2 }}" />
+              <Button row="6" col="0" class="primary-btn" ios:borderRadius="4" text="Pause" tap="{{ pauseAudio }}" />
+              <Button row="6" col="1" class="primary-btn" ios:borderRadius="4" text="Resume" tap="{{ resumePlayer }}" />
+              <button row="6" col="2" class="primary-btn" ios:borderRadius="4" text="Stop" tap="{{ stopPlaying }}" />
+              <Label row="7" colSpan="3" text="Player Speed on Android only API 23+" class="h4" textWrap="true" />
+              <Button row="8" col="0" text="Speed 1" class="accent-btn" ios:borderRadius="4" tap="{{ playSpeed1 }}" />
+              <Button row="8" col="1" text="Speed 1.5" class="accent-btn" ios:borderRadius="4" tap="{{ playSpeed15 }}" />
+              <Button row="8" col="2" text="Speed 2" class="accent-btn" ios:borderRadius="4" tap="{{ playSpeed2 }}" />
               <Label row="9" col="0" text="{{ 'Duration: ' + audioTrackDuration }}" textWrap="true" />
               <Label row="9" col="2" text="{{ 'Remaining: ' + remainingDuration }}" textWrap="true" />
               <Label row="10" col="0" text="Volume Slider: " textWrap="true" class="m-t-20" />
               <Slider row="10" col="1" colSpan="2" id="volumeSlider" minValue="0" maxValue="100" value="100" class="m-t-20" />
-              <Label text="{{ 'Current Volume for Player ' + currentVolume }}" textWrap="true" />
-              <Button row="11" col="0" text="Mute" class="btn btn-primary" tap="{{ muteTap }}" />
-              <Button row="11" col="1" text="Unmute" class="btn btn-primary" tap="{{ unmuteTap }}" />
-              <Button row="12" col="0" colSpan="2" text="Go to 8 Seconds" class="btn btn-primary" tap="{{ skipTo8 }}" />
+              <Label row="11" text="{{ 'Current Volume for Player: ' + currentVolume }}" textWrap="true" />
+              <Button row="12" col="0" text="Mute" class="primary-btn" ios:borderRadius="4" tap="{{ muteTap }}" />
+              <Button row="12" col="1" text="Unmute" class="primary-btn" ios:borderRadius="4" tap="{{ unmuteTap }}" />
+              <Button row="13" col="0" colSpan="2" text="Go to 8 Seconds" class="primary-btn" ios:borderRadius="4" tap="{{ skipTo8 }}" />
             </GridLayout>
           </ScrollView>
         </TabViewItem.view>

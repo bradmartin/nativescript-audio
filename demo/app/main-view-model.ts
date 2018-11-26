@@ -2,27 +2,27 @@ import { AudioPlayerOptions, AudioRecorderOptions, TNSPlayer, TNSRecorder } from
 import * as app from 'tns-core-modules/application';
 import { Observable } from 'tns-core-modules/data/observable';
 import { File, knownFolders } from 'tns-core-modules/file-system';
-import * as platform from 'tns-core-modules/platform';
+import { isAndroid } from 'tns-core-modules/platform';
 import * as timer from 'tns-core-modules/timer';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 import { Page } from 'tns-core-modules/ui/page';
 import { Slider } from 'tns-core-modules/ui/slider';
 import './async-await';
-
-declare const android;
+import { Prop } from './prop';
 
 export class AudioDemo extends Observable {
-  @ObservableProperty() public isPlaying: boolean;
-  @ObservableProperty() public isRecording: boolean;
-  @ObservableProperty() public audioMeter = '0';
-  @ObservableProperty() public recordedAudioFile: string;
-  @ObservableProperty() public currentVolume;
-  @ObservableProperty() public audioTrackDuration;
-  @ObservableProperty() public remainingDuration; // used to show the remaining time of the audio track
+  @Prop() public isPlaying: boolean;
+  @Prop() public isRecording: boolean;
+  @Prop() public audioMeter = '0';
+  @Prop() public recordedAudioFile: string;
+  @Prop() public currentVolume;
+  @Prop() public audioTrackDuration;
+  @Prop() public remainingDuration; // used to show the remaining time of the audio track
   private _recorder;
   private _player: TNSPlayer;
   private _audioSessionId;
   private _page;
+  private _lastRecordedAudioFile: string;
   private _audioUrls: Array<any> = [
     {
       name: 'Fight Club',
@@ -62,7 +62,7 @@ export class AudioDemo extends Observable {
     }
   }
 
-  public async startRecord(args) {
+  public async startRecord() {
     try {
       if (!TNSRecorder.CAN_RECORD()) {
         dialogs.alert('This device cannot record audio.');
@@ -73,19 +73,24 @@ export class AudioDemo extends Observable {
 
       let androidFormat;
       let androidEncoder;
-      if (platform.isAndroid) {
+      if (isAndroid) {
         // m4a
-        // static constants are not available, using raw values here
+        // static constants, using raw values here
         // androidFormat = android.media.MediaRecorder.OutputFormat.MPEG_4;
         androidFormat = 2;
         // androidEncoder = android.media.MediaRecorder.AudioEncoder.AAC;
         androidEncoder = 3;
       }
 
-      const recordingPath = `${audioFolder.path}/recording.${this.platformExtension()}`;
+      const dateTime = this._createDateTimeStamp();
+
+      this._lastRecordedAudioFile = `${
+        audioFolder.path
+      }/recording_${dateTime}.${this.platformExtension()}`;
+      console.log('recorded audio file path', this._lastRecordedAudioFile);
 
       const recorderOptions: AudioRecorderOptions = {
-        filename: recordingPath,
+        filename: this._lastRecordedAudioFile,
 
         format: androidFormat,
 
@@ -114,7 +119,7 @@ export class AudioDemo extends Observable {
     }
   }
 
-  public async stopRecord(args) {
+  public async stopRecord() {
     this._resetMeter();
     await this._recorder.stop().catch(ex => {
       console.log(ex);
@@ -143,10 +148,12 @@ export class AudioDemo extends Observable {
     }
   }
 
-  public getFile(args) {
+  public getFile() {
     try {
       const audioFolder = knownFolders.currentApp().getFolder('audio');
-      const recordedFile = audioFolder.getFile(`recording.${this.platformExtension()}`);
+      // get the last recorded audio file
+      const recordedFile = audioFolder.getFile(this._lastRecordedAudioFile);
+
       console.log(JSON.stringify(recordedFile));
       console.log('recording exists: ' + File.exists(recordedFile.path));
       this.recordedAudioFile = recordedFile.path;
@@ -155,13 +162,17 @@ export class AudioDemo extends Observable {
     }
   }
 
-  public async playRecordedFile(args) {
+  public async playRecordedFile() {
     const audioFolder = knownFolders.currentApp().getFolder('audio');
-    const recordedFile = audioFolder.getFile(`recording.${this.platformExtension()}`);
+    console.log('audioFolder', audioFolder);
+    // get the last recorded audio file
+    const recordedFile = audioFolder.getFile(this._lastRecordedAudioFile);
+
     console.log('RECORDED FILE : ' + JSON.stringify(recordedFile));
 
     const playerOptions: AudioPlayerOptions = {
-      audioFile: `~/audio/recording.${this.platformExtension()}`,
+      // audioFile: `~/audio/recording.${this.platformExtension()}`,
+      audioFile: recordedFile.path,
       loop: false,
       completeCallback: async () => {
         alert('Audio file complete.');
@@ -217,16 +228,19 @@ export class AudioDemo extends Observable {
       this.isPlaying = true;
 
       if (fileType === 'localFile') {
-        await this._player.playFromFile(playerOptions).catch(() => {
+        await this._player.playFromFile(playerOptions).catch(error => {
+          console.log(error);
           this.isPlaying = false;
         });
+
         this.isPlaying = true;
         this.audioTrackDuration = await this._player.getAudioTrackDuration();
         // start audio duration tracking
         this._startDurationTracking(this.audioTrackDuration);
         this._startVolumeTracking();
       } else if (fileType === 'remoteFile') {
-        await this._player.playFromUrl(playerOptions).catch(() => {
+        await this._player.playFromUrl(playerOptions).catch(error => {
+          console.log(error);
           this.isPlaying = false;
         });
         this.isPlaying = true;
@@ -239,7 +253,7 @@ export class AudioDemo extends Observable {
   /**
    * PLAY REMOTE AUDIO FILE
    */
-  public playRemoteFile(args) {
+  public playRemoteFile() {
     console.log('playRemoteFile');
     const filepath = 'http://www.noiseaddicts.com/samples_1w72b820/2514.mp3';
 
@@ -254,15 +268,15 @@ export class AudioDemo extends Observable {
   /**
    * PLAY LOCAL AUDIO FILE from app folder
    */
-  public playLocalFile(args) {
-    let filepath = '~/audio/angel.mp3';
+  public playLocalFile() {
+    const filepath = '~/audio/angel.mp3';
     this.playAudio(filepath, 'localFile');
   }
 
   /**
    * PAUSE PLAYING
    */
-  public async pauseAudio(args) {
+  public async pauseAudio() {
     try {
       await this._player.pause();
       this.isPlaying = false;
@@ -272,7 +286,7 @@ export class AudioDemo extends Observable {
     }
   }
 
-  public async stopPlaying(args) {
+  public async stopPlaying() {
     await this._player.dispose();
     alert('Media Player Disposed.');
   }
@@ -280,7 +294,7 @@ export class AudioDemo extends Observable {
   /**
    * RESUME PLAYING
    */
-  public resumePlaying(args) {
+  public resumePlaying() {
     console.log('START');
     this._player.play();
   }
@@ -331,30 +345,25 @@ export class AudioDemo extends Observable {
       }, 2000);
     }
   }
-}
 
-export function ObservableProperty() {
-  return (obj: Observable, key: string) => {
-    let storedValue = obj[key];
-
-    Object.defineProperty(obj, key, {
-      get: function() {
-        return storedValue;
-      },
-      set: function(value) {
-        if (storedValue === value) {
-          return;
-        }
-        storedValue = value;
-        this.notify({
-          eventName: Observable.propertyChangeEvent,
-          propertyName: key,
-          object: this,
-          value
-        });
-      },
-      enumerable: true,
-      configurable: true
-    });
-  };
+  /**
+   * Create date time stamp similar to Java Date()
+   */
+  private _createDateTimeStamp() {
+    let result = '';
+    const date = new Date();
+    result =
+      date.getFullYear().toString() +
+      (date.getMonth() + 1 < 10
+        ? '0' + (date.getMonth() + 1).toString()
+        : (date.getMonth() + 1).toString()) +
+      (date.getDate() < 10
+        ? '0' + date.getDate().toString()
+        : date.getDate().toString()) +
+      '_' +
+      date.getHours().toString() +
+      date.getMinutes().toString() +
+      date.getSeconds().toString();
+    return result;
+  }
 }

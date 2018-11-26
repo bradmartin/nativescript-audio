@@ -1,4 +1,9 @@
-@import "~/nativescript-theme-core/css/core.light.css";
+@import '~nativescript-theme-core/css/core.light.css';
+
+ActionBar {
+  background-color: #3f51b5;
+  color: #fff;
+}
 
 .message {
   color: #000;
@@ -7,38 +12,22 @@
   padding: 20;
 }
 
-button {
-  horizontal-align: center;
-  padding: 4;
-}
-
 .material-icons {
   font-family: MaterialIcons-Regular, Material Icons;
-}
-
-.playBtn {
-  background-color: #3f51b5;
-  color: #fff;
-}
-
-.whiteBtn {
-  background-color: #fff;
-  color: #333;
 }
 
 .center {
   horizontal-align: center;
 }
 
-.font20 {
-  font-size: 20;
+.primary-btn {
+  margin: 5;
+  background-color: #3f51b5;
+  color: #fff;
 }
-.font28 {
-  font-size: 28;
-}
-.font40 {
-  font-size: 40;
-}
-.font50 {
-  font-size: 50;
+
+.accent-btn {
+  margin: 5;
+  background-color: #ff4081;
+  color: #fff;
 }

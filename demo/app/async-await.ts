@@ -1,6 +1,6 @@
 /* tslint:disable */
 
-"use strict";
+'use strict';
 (global as any).__awaiter =
   (this && this.__awaiter) ||
   function(thisArg, _arguments, P, generator) {
@@ -14,7 +14,7 @@
       }
       function rejected(value) {
         try {
-          step(generator["throw"](value));
+          step(generator['throw'](value));
         } catch (e) {
           reject(e);
         }
@@ -51,13 +51,13 @@
       };
     }
     function step(op) {
-      if (f) throw new TypeError("Generator is already executing.");
+      if (f) throw new TypeError('Generator is already executing.');
       while (_)
         try {
           if (
             ((f = 1),
             y &&
-              (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) &&
+              (t = y[op[0] & 2 ? 'return' : op[0] ? 'throw' : 'next']) &&
               !(t = t.call(y, op[1])).done)
           )
             return t;
