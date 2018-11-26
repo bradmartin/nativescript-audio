@@ -17,7 +17,9 @@ export class TNSRecorder implements TNSRecordI {
 
   public static CAN_RECORD(): boolean {
     const pManager = app.android.context.getPackageManager();
-    const canRecord = pManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_MICROPHONE);
+    const canRecord = pManager.hasSystemFeature(
+      android.content.pm.PackageManager.FEATURE_MICROPHONE
+    );
     if (canRecord) {
       return true;
     } else {
@@ -28,10 +30,12 @@ export class TNSRecorder implements TNSRecordI {
   public requestRecordPermission(explanation = '') {
     return new Promise(async (resolve, reject) => {
       try {
-        await permissions.requestPermission((android as any).Manifest.permission.RECORD_AUDIO).catch(err => {
-          TNS_Recorder_Log('Error getting RECORD_AUDIO permission.', err);
-          reject(err);
-        });
+        await permissions
+          .requestPermission((android as any).Manifest.permission.RECORD_AUDIO)
+          .catch(err => {
+            TNS_Recorder_Log('Error getting RECORD_AUDIO permission.', err);
+            reject(err);
+          });
         resolve();
       } catch (error) {
         TNS_Recorder_Log('requestRecordPermission error', error);
@@ -41,7 +45,9 @@ export class TNSRecorder implements TNSRecordI {
   }
 
   public hasRecordPermission() {
-    const permission = permissions.hasPermission((android as any).Manifest.permission.RECORD_AUDIO);
+    const permission = permissions.hasPermission(
+      (android as any).Manifest.permission.RECORD_AUDIO
+    );
     return !0 === permission ? !0 : !1;
   }
 
@@ -58,7 +64,9 @@ export class TNSRecorder implements TNSRecordI {
           // reset for reuse
           this._recorder.reset();
         } else {
-          TNS_Recorder_Log('recorder is not initialized, creating new instance of android MediaRecorder.');
+          TNS_Recorder_Log(
+            'recorder is not initialized, creating new instance of android MediaRecorder.'
+          );
           this._recorder = new android.media.MediaRecorder();
         }
 

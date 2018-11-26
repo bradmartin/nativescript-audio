@@ -139,13 +139,19 @@ export function resolveAudioFilePath(path: string) {
       return path;
     } else {
       let audioPath;
+
       let fileName = isString(path) ? path.trim() : '';
+
       if (fileName.indexOf('~/') === 0) {
-        fileName = fs.path.join(fs.knownFolders.currentApp().path, fileName.replace('~/', ''));
+        fileName = fs.path.join(
+          fs.knownFolders.currentApp().path,
+          fileName.replace('~/', '')
+        );
         audioPath = fileName;
       } else {
         audioPath = fileName;
       }
+
       return audioPath;
     }
   }
