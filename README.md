@@ -78,6 +78,12 @@ export class YourClass {
 
   constructor() {
     this._player = new TNSPlayer();
+    // You can pass a duration hint to control the behavior of other application that may
+    // be holding audio focus.
+    // For example: new  TNSPlayer(AudioFocusDurationHint.AUDIOFOCUS_GAIN_TRANSIENT);
+    // Then when you play a song, the previous owner of the
+    // audio focus will stop. When your song stops
+    // the previous holder will resume.
     this._player.debug = true; // set true to enable TNSPlayer console logs for debugging.
     this._player
       .initFromFile({

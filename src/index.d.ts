@@ -195,6 +195,11 @@ export declare class TNSPlayer {
    */
   readonly currentTime: number;
 
+  /**
+   * @param  {AudioFocusDurationHint} durationHint - Determines differents behaviors by the system and the other application that previously held audio focus. See the {@link https://developer.android.com/reference/android/media/AudioFocusRequest#the-different-types-of-focus-requests different  types of focus requests}
+   */
+  constructor(durationHint?: AudioFocusDurationHint);
+
   initFromFile(options: AudioPlayerOptions): Promise<any>;
 
   /**
@@ -328,4 +333,42 @@ export interface IAudioPlayerEvents {
   paused: 'paused';
   started: 'started';
 }
+
 export const AudioPlayerEvents: IAudioPlayerEvents;
+
+export enum AudioFocusDurationHint {
+  /**
+   * Expresses the fact that your application is now the sole source
+   * of audio that the user is listening to. The duration of the
+   * audio playback is unknown, and is possibly very long: after the
+   * user finishes interacting with your application, (s)he doesn’t
+   * expect another audio stream to resume.
+   */
+  AUDIOFOCUS_GAIN = android.media.AudioManager.AUDIOFOCUS_GAIN,
+  /**
+   * For a situation when you know your application is temporarily
+   * grabbing focus from the current owner, but the user expects
+   * playback to go back to where it was once your application no
+   * longer requires audio focus.
+   */
+  AUDIOFOCUS_GAIN_TRANSIENT = android.media.AudioManager
+    .AUDIOFOCUS_GAIN_TRANSIENT,
+  /**
+   * This focus request type is similar to AUDIOFOCUS_GAIN_TRANSIENT
+   * for the temporary aspect of the focus request, but it also
+   * expresses the fact during the time you own focus, you allow
+   * another application to keep playing at a reduced volume,
+   * “ducked”.
+   */
+  AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK = android.media.AudioManager
+    .AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK,
+  /**
+   * Also for a temporary request, but also expresses that your
+   * application expects the device to not play anything else. This
+   * is typically used if you are doing audio recording or speech
+   * recognition, and don’t want for examples notifications to be
+   * played by the system during that time.
+   */
+  AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE = android.media.AudioManager
+    .AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK
+}
